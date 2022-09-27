@@ -1,7 +1,7 @@
-from django.contrib import admin
-from django.urls import path, include
+from django.urls import path
 
+from . import views
 urlpatterns = [
-    path('', include('first.urls')),
-    path('admin/', admin.site.urls),
+    path('', views.index, name='index'),
+    path('book/<int:book_id>/', views.view_book, name='view_book'),
 ]

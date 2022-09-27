@@ -10,8 +10,6 @@
         <li class="list-group-item"><a href="/book/{{book.id}}"> {{ book.name }}</a> </li>
         <li class="list-group-item">{{ book.author.name }} </li>
         <li class="list-group-item">{{ book.author.surname }} </li>
-        <li class="list-group-item">{{ book.pub_date }} </li>
-        <li class="list-group-item">{{ book.num_pages }}</li>
     </ul>
     {% endfor %}
     </ul>
@@ -23,14 +21,10 @@
 <form method="post">{% csrf_token %}
     <input type="text" name="aname" class="form-control" placeholder="Введите имя:" /><br>
     <input type="text" name="surname" class="form-control" placeholder="Введите фамилию:"/><br>
-    <input type="date" name="bday" class="form-control" /><br>
-    <input type="submit"  class="btn btn-primary" value="Сохранить">
-</form>
-</div>
-<div class="container">
     <label>Книга:</label>
-<form method="post">{% csrf_token %}
     <input type="text" name="bname" class="form-control" placeholder="Введите название:" /><br>
+    <input type="text" name="text" class="form-control" placeholder="Введите текст:" /><br>
+    <input type="submit"  class="btn btn-primary" value="Сохранить">
 </form>
 </div>
 </body>
