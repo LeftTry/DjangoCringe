@@ -38,3 +38,24 @@ def index(request):
 def view_book(request, book_id):
     book = get_object_or_404(Book, pk=book_id)
     return render(request, 'book.html', {'book': book})
+
+def delete_book(request, pk):
+    book = get_object_or_404(Book, pk=pk)  
+
+    if request.method == 'POST':         
+        book.delete()                     
+        return redirect('/')
+
+    return render(request, 'index.html', {'book': book})
+
+def delete_author(request, pk):
+    author = get_object_or_404(Author, pk=pk)  
+    if request.method == 'POST':         
+        author.delete()
+        book_list = Book.objects.order_by('-name')
+        for i in book_list:
+            if i.author == author:
+                i.delete()
+        return redirect('/')
+
+    return render(request, 'index.html', {'author': author})

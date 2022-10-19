@@ -10,6 +10,14 @@
         <li class="list-group-item"><a href="/book/{{book.id}}"> {{ book.name }}</a> </li>
         <li class="list-group-item">{{ book.author.name }} </li>
         <li class="list-group-item">{{ book.author.surname }} </li>
+        <li class="list-group-item"><form action="{% url 'books:delete_book' book.id %}" method="post">
+            {% csrf_token %}
+            <input type="submit" class="btn btn-danger" value="Удалить книгу">
+        </form></li>
+        <li class="list-group-item"><form action="{% url 'books:delete_author' book.author.id %}" method="post">
+            {% csrf_token %}
+            <input type="submit" class="btn btn-danger" value="Удалить автора">
+        </form></li>
     </ul>
     {% endfor %}
     </ul>
@@ -23,7 +31,7 @@
     <input type="text" name="surname" class="form-control" placeholder="Введите фамилию:"/><br>
     <label>Книга:</label>
     <input type="text" name="bname" class="form-control" placeholder="Введите название:" /><br>
-    <input type="text" name="text" class="form-control" placeholder="Введите текст:" /><br>
+    <input type="text" name="text" class="form-control" id="exampleFormControlTextarea1" rows="5" placeholder="Введите текст:" /><br>
     <input type="submit"  class="btn btn-primary" value="Сохранить">
 </form>
 </div>
