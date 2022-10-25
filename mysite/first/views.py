@@ -66,21 +66,25 @@ def delete_author(request, pk):
 
 def login_page(request):
     if request.method == 'GET':
-        # если юзер залогинен - редирект на основную стр
         if request.user.is_authenticated:
-            return redirect('/')
-        return render(request, 'login.html')
+            return redirect('/index')
+        return render(request, 'logpage.html')
     if request.method == 'POST':
         username = request.POST.get('login', '')
         password = request.POST.get('password', '')
 
         if username == '' or password == '':
-            return redirect('/login')
+            return redirect('/')
 
         user = authenticate(username=username, password=password)
 
         if user is not None:
             login(request, user)
-            return redirect('/')
+            return redirect('/index')
         else:
-            return redirect('/login')
+            return redirect('/')
+
+def logout_page(request):
+    if request.method == 'POST':
+        logout(request)
+    return redirect('/')

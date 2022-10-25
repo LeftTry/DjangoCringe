@@ -3,6 +3,19 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrtiy="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+       <div class="collapse navbar-collapse" id="navbarSupportedContent">
+         <ul class="navbar-nav mr-auto">
+           <li class="nav-item active">
+             <a class="nav-link" href="">Главная<span class="sr-only">(current)</span></a>
+           </li>
+                 </ul>
+                 <form method="post" action="/logout">
+           {% csrf_token %}
+           <input type="submit" name="LogOut" class="btn btn-primary" value="Выйти">
+             </form>
+           </div>
+           </nav>
     {% if book_list %}
     <ul class="list-group">
     {% for book in book_list %}
