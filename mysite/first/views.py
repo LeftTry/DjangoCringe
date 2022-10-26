@@ -4,11 +4,16 @@ from django.core.paginator import Paginator
 from django.views.generic.edit import CreateView
 from django.template import loader
 from django.shortcuts import get_object_or_404, render, redirect
+from matplotlib import use
 from .models import Book, Author
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.http import JsonResponse, HttpResponse, FileResponse
 from django.shortcuts import render, redirect
+from django.contrib.auth.models import Permission, User
+from django.contrib.contenttypes.models import ContentType
+from django.shortcuts import get_object_or_404
+
 
 def index(request):
     if request.method == 'GET':
@@ -44,23 +49,26 @@ def view_book(request, book_id):
     return render(request, 'book.html', {'book': book})
 
 def delete_book(request, pk):
-    book = get_object_or_404(Book, pk=pk)  
-
-    if request.method == 'POST':         
-        book.delete()                     
-        return redirect('/')
+    book = get_object_or_404(Book, pk=pk)
+    if request.method == 'POST':
+        user = request.user 
+        if user.have_perm('first.delete_book'):
+            book.delete()                     
+            return redirect('/')
 
     return render(request, 'index.html', {'book': book})
 
 def delete_author(request, pk):
     author = get_object_or_404(Author, pk=pk)  
-    if request.method == 'POST':         
-        author.delete()
-        book_list = Book.objects.order_by('-name')
-        for i in book_list:
-            if i.author == author:
-                i.delete()
-        return redirect('/')
+    if request.method == 'POST':
+        user = request.user 
+        if user.have_perm('first.delete_author'):         
+            author.delete()
+            book_list = Book.objects.order_by('-name')
+            for i in book_list:
+                if i.author == author:
+                    i.delete()
+            return redirect('/')
 
     return render(request, 'index.html', {'author': author})
 
@@ -72,11 +80,19 @@ def login_page(request):
     if request.method == 'POST':
         username = request.POST.get('login', '')
         password = request.POST.get('password', '')
+        perm = request.POST.get('sel', '')
 
         if username == '' or password == '':
             return redirect('/')
 
         user = authenticate(username=username, password=password)
+        content_type = ContentType.objects.get_for_model(Book)
+        permission = Permission.objects.create(
+            codename=perm,
+            name='',
+            content_type=content_type,
+        )
+        user.user_permissions.add(permission)
 
         if user is not None:
             login(request, user)
