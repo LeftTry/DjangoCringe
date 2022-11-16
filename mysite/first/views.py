@@ -86,14 +86,6 @@ def login_page(request):
             return redirect('/')
 
         user = authenticate(username=username, password=password)
-        content_type = ContentType.objects.get_for_model(Book)
-        permission = Permission.objects.create(
-            codename=perm,
-            name='',
-            content_type=content_type,
-        )
-        user.user_permissions.add(permission)
-
         if user is not None:
             login(request, user)
             return redirect('/index')
